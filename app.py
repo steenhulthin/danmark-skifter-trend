@@ -160,7 +160,7 @@ def load_data(instance: str, hashtag: str, start_date: date, page_limit: int):
 
 
 st.set_page_config(
-    page_title="#DanmarkSkifter on Mastodon",
+    page_title="#DanmarkSkifter på Mastodon",
     page_icon="📈",
     layout="wide",
 )
@@ -211,12 +211,12 @@ st.markdown(
 st.markdown(
     f"""
     <section class="hero">
-        <div class="hero-kicker">Single-Chart Mastodon Dashboard</div>
-        <h1>How trending is #{HASHTAG} on Mastodon?</h1>
+        <div class="hero-kicker">Mastodon-dashboard i ét diagram</div>
+        <h1>Hvor meget trender #{HASHTAG} på Mastodon?</h1>
         <p>
-            This dashboard pulls public posts from a Mastodon hashtag timeline and rolls them up by day,
-            starting on <strong>{START_DATE.isoformat()}</strong>.
-            #DanmarkSkifter-dashboardet er en del af <a href="https://steenhulthin.github.io/DagensDashboard/">#DagensDashboard</a>
+            Dette dashboard henter offentlige opslag ("Toots") fra en Mastodon-hashtag-tidslinje og summerer dem pr. dag
+            fra og med <strong>{START_DATE.isoformat()}</strong>.
+            #DanmarkSkifter-dashboardet er en del af <a href="https://steenhulthin.github.io/DagensDashboard/">#DagensDashboard</a>.
         </p>
     </section>
     """,
@@ -224,12 +224,12 @@ st.markdown(
 )
 
 with st.sidebar:
-    st.header("Data Source")
-    instance = st.text_input("Mastodon instance", value=DEFAULT_INSTANCE).strip()
-    st.caption("Default server is `helvede.net`. If that does not work, try `mastodon.social`.")
-    page_limit = st.number_input("Pages to scan", value=PAGE_LIMIT)
+    st.header("Datakilde")
+    instance = st.text_input("Mastodon-server", value=DEFAULT_INSTANCE).strip()
+    st.caption("Den valgte server er som udgangspunkt `helvede.net`. Hvis den ikke virker, så prøv `mastodon.social`.")
+    page_limit = st.number_input("Antal sider at scanne", value=PAGE_LIMIT)
     st.caption(
-        "More pages digs further back in time, but the API only exposes what the chosen instance still has available. Only needs to change if #DanmarkSkifter really gets mentioned a lot."
+        "Jo flere sider, jo længere tilbage i tiden går opslagene, men API'et viser kun det, som den valgte server stiller til rådighed. Det behøver kun at ændres, hvis #DanmarkSkifter virkelig bliver nævnt meget."
     )
 
 try:
@@ -240,15 +240,15 @@ try:
         page_limit=page_limit,
     )
 except requests.HTTPError as exc:
-    st.error(f"Mastodon returned an error: {exc}")
+    st.error(f"Mastodon returnerede en fejl: {exc}")
     st.stop()
 except requests.RequestException as exc:
-    st.error(f"Could not reach the Mastodon API: {exc}")
+    st.error(f"Kunne ikke kontakte Mastodon-API'et: {exc}")
     st.stop()
 
 if trend_frame.empty:
     st.warning(
-        "No public posts were returned for this hashtag on the selected instance in the available time range."
+        "Der blev ikke fundet offentlige opslag med dette hashtag på den valgte server i det tilgængelige tidsrum."
     )
     st.stop()
 
@@ -256,6 +256,6 @@ chart_frame = trend_frame.set_index("created_day")[["posts"]]
 st.area_chart(chart_frame, height=520, width="stretch", color="#f4a261")
 
 st.caption(
-    f"Loaded {metadata['statuses_collected']} posts from `{metadata['instance']}` across "
-    f"{metadata['pages_fetched']} API pages. Oldest fetched day: {metadata['oldest_seen'] or 'unknown'}."
+    f"Indlæste {metadata['statuses_collected']} opslag fra `{metadata['instance']}` fordelt på "
+    f"{metadata['pages_fetched']} API-sider. Ældste hentede dag: {metadata['oldest_seen'] or 'ukendt'}."
 )
