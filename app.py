@@ -2,7 +2,6 @@ from datetime import date, datetime, timezone
 from html.parser import HTMLParser
 from typing import Dict, List, Optional, Tuple
 
-import altair as alt
 import pandas as pd
 import requests
 import streamlit as st
@@ -252,22 +251,8 @@ if trend_frame.empty:
     )
     st.stop()
 
-chart = (
-    alt.Chart(trend_frame)
-    .mark_area(line={"color": "#0b6e4f", "strokeWidth": 2.5}, color="#f4a261")
-    .encode(
-        x=alt.X("created_day:T", title="Day"),
-        y=alt.Y("posts:Q", title="Posts with #DanmarkSkifter"),
-        tooltip=[
-            alt.Tooltip("created_day:T", title="Day"),
-            alt.Tooltip("posts:Q", title="Posts"),
-            alt.Tooltip("engagement:Q", title="Engagement"),
-        ],
-    )
-    .properties(height=520)
-)
-
-st.altair_chart(chart, width="stretch")
+chart_frame = trend_frame.set_index("created_day")[["posts"]]
+st.area_chart(chart_frame, height=520, width="stretch", color="#f4a261")
 
 st.caption(
     f"Loaded {metadata['statuses_collected']} posts from `{metadata['instance']}` across "
