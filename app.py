@@ -227,9 +227,9 @@ with st.sidebar:
     st.header("Data Source")
     instance = st.text_input("Mastodon instance", value=DEFAULT_INSTANCE).strip()
     st.caption("Default server is `helvede.net`. If that does not work, try `mastodon.social`.")
-    page_limit = st.slider("Pages to scan", min_value=5, max_value=40, value=PAGE_LIMIT)
+    page_limit = st.number_input("Pages to scan", value=PAGE_LIMIT)
     st.caption(
-        "More pages digs further back in time, but the API only exposes what the chosen instance still has available."
+        "More pages digs further back in time, but the API only exposes what the chosen instance still has available. Only needs to change if #DanmarkSkifter really gets mentioned a lot."
     )
 
 try:
