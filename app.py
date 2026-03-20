@@ -8,7 +8,7 @@ import requests
 import streamlit as st
 
 
-DEFAULT_INSTANCE = "mastodon.social"
+DEFAULT_INSTANCE = "helvede.net"
 HASHTAG = "DanmarkSkifter"
 START_DATE = date(2025, 12, 1)
 PAGE_LIMIT = 40
@@ -226,6 +226,7 @@ st.markdown(
 with st.sidebar:
     st.header("Data Source")
     instance = st.text_input("Mastodon instance", value=DEFAULT_INSTANCE).strip()
+    st.caption("Default server is `helvede.net`. If that does not work, try `mastodon.social`.")
     page_limit = st.slider("Pages to scan", min_value=5, max_value=40, value=PAGE_LIMIT)
     st.caption(
         "More pages digs further back in time, but the API only exposes what the chosen instance still has available."
@@ -266,7 +267,7 @@ chart = (
     .properties(height=520)
 )
 
-st.altair_chart(chart, use_container_width=True)
+st.altair_chart(chart, width="stretch")
 
 st.caption(
     f"Loaded {metadata['statuses_collected']} posts from `{metadata['instance']}` across "
