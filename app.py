@@ -216,6 +216,7 @@ st.markdown(
         <p>
             This dashboard pulls public posts from a Mastodon hashtag timeline and rolls them up by day,
             starting on <strong>{START_DATE.isoformat()}</strong>.
+            #DanmarkSkifter-dashboardet er en del af <a href="https://steenhulthin.github.io/DagensDashboard/">#DagensDashboard</a>
         </p>
     </section>
     """,
